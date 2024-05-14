@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+// Cart.tsx
+import  { useEffect, useState } from 'react';
 import { Card } from "primereact/card";
 import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
 import PageTemplate from "@assets/PageTemplate";
 import axios from 'axios';
-import OrderDetail from "./OrderDetail"; 
+import OrderDetail from './OrderDetail';
+
 
 type Order = {
     id: number;
@@ -17,24 +19,24 @@ type Order = {
 };
 
 const Cart = () => {
-    const [orders, setOrders] = useState<Order[]>([]);
+    const [Orders, setOrders] = useState<Order[]>([]);
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/cart');
+                const response = await axios.get('http://localhost:3000/orders');
                 setOrders(response.data);
             } catch (error) {
-                console.error('Error fetching orders:', error);
+                console.error('Error fetching Orders:', error);
             }
         };
         fetchOrders();
     }, []);
 
-    const handleOrderSelect = (order: Order) => {
-        setSelectedOrder(order);
+    const handleOrderSelect = (Order: Order) => {
+        setSelectedOrder(Order);
         setShowModal(true);
     };
 
@@ -43,15 +45,15 @@ const Cart = () => {
         setSelectedOrder(null);
     };
 
-    const itemTemplate = (order: Order) => (
-        <Card className="mx-3 my-2" onClick={() => handleOrderSelect(order)}>
+    const itemTemplate = (Order: Order) => (
+        <Card className="mx-3 my-2" onClick={() => handleOrderSelect(Order)}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src={order.image} alt={order.name} style={{ width: '150px', height: 'auto', marginRight: '20px' }} />
+                <img src={Order.image} alt={Order.name} style={{ width: '150px', height: 'auto', marginRight: '20px' }} />
                 <div>
-                    <h2>{order.name}</h2>
-                    <p>${order.price}</p>
-                    <div className="text-700">{order.description}</div>
-                    <Rating value={order.rating} readOnly cancel={false} />
+                    <h2>{Order.name}</h2>
+                    <p>${Order.price}</p>
+                    <div className="text-700">{Order.description}</div>
+                    <Rating value={Order.rating} readOnly cancel={false} />
                     <Button label="View Details" icon="pi pi-eye" />
                 </div>
             </div>
@@ -61,7 +63,7 @@ const Cart = () => {
     return (
         <PageTemplate needBack2Top>
             <div className="card">
-                {orders.map(order => itemTemplate(order))}
+                {Orders.map(Order => itemTemplate(Order))}
                 {showModal && selectedOrder && <OrderDetail order={selectedOrder} onClose={handleCloseModal} />}
             </div>
         </PageTemplate>
