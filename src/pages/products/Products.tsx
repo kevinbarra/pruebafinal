@@ -1,13 +1,11 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from "primereact/card";
 import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
+import { Dropdown } from 'primereact/dropdown';
 import PageTemplate from "@assets/PageTemplate";
-import axios from 'axios'; // Asegúrate de que axios está instalado
+import axios from 'axios'; // Ensure axios is installed
 import ProductDetail from "./productdetail";
-
-
-
 
 type Product = {
     id: number;
@@ -23,12 +21,17 @@ const Products = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [showModal, setShowModal] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [categories, setCategories] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 const response = await axios.get('https://backend-production-b113.up.railway.app/products');
-                setProducts(response.data);
+                const productsData: Product[] = response.data;
+                setProducts(productsData);
+                const uniqueCategories = Array.from(new Set(productsData.map(product => product.category)));
+                setCategories(uniqueCategories);
             } catch (error) {
                 console.error('Error fetching products:', error);
             }
@@ -64,8 +67,9 @@ const Products = () => {
 
     return (
         <PageTemplate needBack2Top>
+            <Dropdown value={selectedCategory} options={categories} onChange={(e) => setSelectedCategory(e.value)} placeholder="Select a category" style={{ marginBottom: '1em' }} />
             <div className="card">
-                {products.map(product => itemTemplate(product))}
+                {products.filter(product => !selectedCategory || product.category === selectedCategory).map(product => itemTemplate(product))}
                 {showModal && selectedProduct && <ProductDetail product={selectedProduct} onClose={handleCloseModal} />}
             </div>
         </PageTemplate>
