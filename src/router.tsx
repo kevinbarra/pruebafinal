@@ -33,7 +33,9 @@ export const router = createBrowserRouter([
     },
     {
         path: "/products/:productId",
-        element: <ProductDetail />
+        element: <ProductDetail product={null} onClose={function (): void {
+            throw new Error("Function not implemented.");
+        } } />
     },
     {
         path: "/cart/pay",

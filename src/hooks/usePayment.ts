@@ -12,7 +12,7 @@ export const usePayment = (amount: number) => {
 
 
     const getClientSecret = async () => {
-        const data = await post('create-payment-intent', '', JSON.stringify(
+        const data = await post('create-payment-intent', JSON.stringify(
             {
                 amount: amount,
                 customer: "Carlos Castro"
