@@ -27,7 +27,7 @@ const Products = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/products');
+                const response = await axios.get('https://backend-production-b113.up.railway.app/products');
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);

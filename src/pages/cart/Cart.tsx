@@ -26,7 +26,7 @@ const Cart = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/orders');
+                const response = await axios.get('https://backend-production-b113.up.railway.app/orders');
                 setOrders(response.data);
             } catch (error) {
                 console.error('Error fetching Orders:', error);
