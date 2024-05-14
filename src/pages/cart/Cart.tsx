@@ -3,7 +3,8 @@ import { Card } from "primereact/card";
 import { Button } from 'primereact/button';
 import { Rating } from 'primereact/rating';
 import PageTemplate from "@assets/PageTemplate";
-import axios from 'axios'; 
+import axios from 'axios';
+import OrderDetail from "./OrderDetail"; 
 
 type Order = {
     id: number;
@@ -17,27 +18,33 @@ type Order = {
 
 const Cart = () => {
     const [orders, setOrders] = useState<Order[]>([]);
+    const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                // Cambiar a usar el puerto correcto (asumiendo que el servidor está en el puerto 3000)
-                const response = await axios.get('http://localhost:3000/orders');
+                const response = await axios.get('http://localhost:3000/cart');
                 setOrders(response.data);
             } catch (error) {
                 console.error('Error fetching orders:', error);
             }
         };
-    
         fetchOrders();
     }, []);
 
     const handleOrderSelect = (order: Order) => {
-        // Logic to handle order selection, similar to product selection logic in Products.tsx
+        setSelectedOrder(order);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedOrder(null);
     };
 
     const itemTemplate = (order: Order) => (
-        <Card className="mx-3 my-2">
+        <Card className="mx-3 my-2" onClick={() => handleOrderSelect(order)}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <img src={order.image} alt={order.name} style={{ width: '150px', height: 'auto', marginRight: '20px' }} />
                 <div>
@@ -55,6 +62,7 @@ const Cart = () => {
         <PageTemplate needBack2Top>
             <div className="card">
                 {orders.map(order => itemTemplate(order))}
+                {showModal && selectedOrder && <OrderDetail order={selectedOrder} onClose={handleCloseModal} />}
             </div>
         </PageTemplate>
     );

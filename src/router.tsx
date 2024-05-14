@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
         element: <Success />
     },
     {
-        path: "/orders",  // Ruta añadida para "Mis Ordenes"
+        path: "/cart",  // Ruta añadida para "Mis Ordenes"
         element: <Cart />
     }
 ]);

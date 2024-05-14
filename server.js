@@ -26,16 +26,6 @@ app.get('/products', async (req, res) => {
   }
 });
 
-// Nuevo endpoint para pedidos
-app.get('/orders', async (req, res) => {
-  try {
-    const { rows } = await pool.query('SELECT * FROM orders');
-    res.json(rows);
-  } catch (error) {
-    console.error('Error retrieving data from PostgreSQL', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

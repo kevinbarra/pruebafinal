@@ -25,7 +25,7 @@ const NavBar = () => {
         {
             label: 'My Orders',
             icon: <ArchiveBoxIcon className='w-7 pe-1' />,
-            command: () => navigator('/orders')
+            command: () => navigator('/cart')
         }
     ], [navigator]);
 
